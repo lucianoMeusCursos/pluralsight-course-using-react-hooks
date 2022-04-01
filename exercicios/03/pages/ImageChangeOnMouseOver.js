@@ -1,5 +1,5 @@
-import React from "react";
-import ImageToggleOnMouseOver from "../src/ImageToggleOnMouseOver"
+import React from 'react';
+import ImageToggleOnMouseOver from '../src/ImageToggleOnMouseOver';
 
 const ImageChangeOnMouseOver = () => {
   return (
@@ -15,7 +15,7 @@ const ImageChangeOnMouseOver = () => {
         alt=""
       />
     </div>
-  )
-}
+  );
+};
 
-export default ImageChangeOnMouseOver
+export default ImageChangeOnMouseOver;
