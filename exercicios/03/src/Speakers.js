@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
 
 import { Header } from './Header';
 import { Menu } from './Menu';
@@ -12,7 +12,17 @@ const Speakers = ({}) => {
   const [speakingSaturday, setSpeakingSaturday] = useState(true);
   const [speakingSunday, setSpeakingSunday] = useState(true);
 
-  const [speakerList, setSpeakerList] = useState([]);
+  function speakReducer(state, action) {
+    switch (action.type) {
+      case 'setSpeakerList': {
+        return action.data;
+      }
+      default:
+        return state;
+    }
+  }
+  // const [speakerList, setSpeakerList] = useState([]);
+  const [speakerList, dispatch] = useReducer(speakReducer, []);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -23,8 +33,15 @@ const Speakers = ({}) => {
       }, 1000);
     }).then(() => {
       setIsLoading(false);
+      const speakerListServerFilter = SpeakerData.filter(({ sat, sun }) => {
+        return (speakingSaturday && sat) || (speakingSunday && sun);
+      });
+      // setSpeakerList(speakerListServerFilter);
+      dispatch({
+        type: 'setSpeakerList',
+        data: speakerListServerFilter,
+      });
     });
-    setSpeakerList(SpeakerData);
     return () => {
       console.log('limpo');
     };
