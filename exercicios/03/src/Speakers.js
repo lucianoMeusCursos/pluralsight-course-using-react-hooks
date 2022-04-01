@@ -4,23 +4,14 @@ import { Header } from './Header';
 import { Menu } from './Menu';
 import SpeakerData from './SpeakerData';
 import SpeakerDetail from './SpeakerDetail';
-
 import { ConfigContext } from './App';
+import speakReducer from './speakersReducer';
 
 const Speakers = ({}) => {
   const context = useContext(ConfigContext);
   const [speakingSaturday, setSpeakingSaturday] = useState(true);
   const [speakingSunday, setSpeakingSunday] = useState(true);
 
-  function speakReducer(state, action) {
-    switch (action.type) {
-      case 'setSpeakerList': {
-        return action.data;
-      }
-      default:
-        return state;
-    }
-  }
   // const [speakerList, setSpeakerList] = useState([]);
   const [speakerList, dispatch] = useReducer(speakReducer, []);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,14 +67,18 @@ const Speakers = ({}) => {
     e.preventDefault();
     const sessionId = parseInt(e.target.attributes['data-sessionid'].value);
 
-    setSpeakerList(
-      speakerList.map((item) => {
-        if (item.id === sessionId) {
-          return { ...item, favorite: favoriteValue };
-        }
-        return item;
-      }),
-    );
+    dispatch({
+      type: favoriteValue === true ? 'favorite' : 'unfavorite',
+      sessionId,
+    });
+    // setSpeakerList(
+    //   speakerList.map((item) => {
+    //     if (item.id === sessionId) {
+    //       return { ...item, favorite: favoriteValue };
+    //     }
+    //     return item;
+    //   }),
+    // );
   };
 
   if (isLoading) return <div>Loading...</div>;
