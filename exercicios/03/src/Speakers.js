@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useReducer,
   useState,
 } from 'react';
@@ -52,9 +53,9 @@ const Speakers = ({}) => {
     setSpeakingSunday(!speakingSunday);
   };
 
-  const speakerListFiltered = isLoading
-    ? []
-    : speakerList
+  const newSpeakerList = useMemo(
+    () =>
+      speakerList
         .filter(
           ({ sat, sun }) =>
             (speakingSaturday && sat) || (speakingSunday && sun),
@@ -67,7 +68,11 @@ const Speakers = ({}) => {
             return 1;
           }
           return 0;
-        });
+        }),
+    [speakerList, speakingSaturday, speakingSunday],
+  );
+
+  const speakerListFiltered = isLoading ? [] : newSpeakerList;
 
   const heartFavoriteHandler = useCallback((e, favoriteValue) => {
     e.preventDefault();
